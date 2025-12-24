@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>통영시민포럼 | Future City Tongyeong</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        },
+                        cyan: {
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'fade-up': 'fadeUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #1e293b; /* Slate 800 */
+        }
+        
+        /* Light Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+        }
+        
+        /* Text Gradients */
+        .text-gradient-primary {
+            background: linear-gradient(135deg, #0891b2 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Utilities */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Timeline line */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 28px; /* Adjust based on padding */
+            width: 2px;
+            background: #e2e8f0;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyan-100 selection:text-cyan-900">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer group" onclick="window.scrollTo(0,0)">
+                    <div class="relative w-8 h-8 flex items-center justify-center">
+                        <div class="absolute inset-0 bg-blue-500 rounded-full blur opacity-10 group-hover:opacity-20 transition-opacity"></div>
+                        <i data-lucide="waves" class="text-blue-600 relative z-10 h-6 w-6"></i>
+                    </div>
+                    <span class="font-bold text-lg tracking-tight text-slate-800 group-hover:text-blue-600 transition-colors">통영시민포럼</span>
+                </div>
+                
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-1">
+                        <a href="#about" class="px-4 py-2 rounded-full text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-all">비전</a>
+                        <a href="#pillars" class="px-4 py-2 rounded-full text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-all">핵심요소</a>
+                        <a href="#forum-info" class="px-4 py-2 rounded-full text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 transition-all">포럼 일정</a>
+                        <a href="#strategy" class="px-4 py-2 rounded-full text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-all">실행전략</a>
+                        <a href="#impact" class="px-4 py-2 rounded-full text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-all">기대효과</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <a href="#forum-info" class="hidden md:flex items-center gap-2 px-5 py-2 rounded-full bg-blue-600 text-white border border-blue-600 text-sm font-semibold hover:bg-blue-700 transition-all shadow-sm">
+                        참가 신청 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                    <div class="-mr-2 flex md:hidden">
+                        <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-slate-500 hover:text-slate-900 focus:outline-none" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                            <i data-lucide="menu" class="h-6 w-6"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="hidden md:hidden bg-white border-b border-slate-200" id="mobile-menu">
+            <div class="px-4 pt-4 pb-6 space-y-2">
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50">비전</a>
+                <a href="#pillars" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50">핵심요소</a>
+                <a href="#forum-info" class="block px-3 py-2 rounded-md text-base font-medium text-blue-600 bg-blue-50">포럼 일정</a>
+                <a href="#strategy" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50">실행전략</a>
+                <a href="#impact" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50">기대효과</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-50">
+        <!-- Abstract Background -->
+        <div class="absolute inset-0">
+            <!-- Light blobs -->
+            <div class="absolute top-0 -left-4 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+            <div class="absolute top-0 -right-4 w-96 h-96 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+            <div class="absolute -bottom-8 left-20 w-96 h-96 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-white/0 via-white/50 to-white"></div>
+        </div>
+
+        <div class="relative z-10 px-4 max-w-7xl mx-auto w-full pt-20">
+            <div class="flex flex-col items-center text-center">
+                <div class="reveal active inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-bold tracking-widest uppercase">
+                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                    Tongyeong Blue Economy Master Plan
+                </div>
+                
+                <h1 class="reveal active delay-100 text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 mb-8 leading-tight tracking-tight drop-shadow-sm">
+                    OCEAN <span class="text-slate-300 mx-2">X</span> AI<br>
+                    <span class="text-gradient-primary">TONGYEONG</span>
+                </h1>
+                
+                <p class="reveal active delay-200 mt-2 max-w-2xl mx-auto text-lg md:text-xl text-slate-600 leading-relaxed font-light">
+                    기후위기 대응과 데이터 산업의 결합.<br>
+                    <strong class="text-slate-900 font-medium">통영시민포럼</strong>이 지속 가능한 도시의 미래를 설계합니다.
+                </p>
+                
+                <div class="reveal active delay-300 mt-12 flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                    <a href="#forum-info" class="px-8 py-4 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-all flex items-center justify-center gap-2 group shadow-lg hover:shadow-xl hover:-translate-y-1">
+                        포럼 참가 신청 
+                        <i data-lucide="arrow-down-right" class="w-5 h-5 group-hover:translate-x-1 group-hover:translate-y-1 transition-transform"></i>
+                    </a>
+                    <a href="#about" class="px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-full font-bold hover:bg-slate-50 transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
+                        비전 보기
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-400">
+            <span class="text-[10px] tracking-widest uppercase">Scroll</span>
+            <div class="w-[1px] h-12 bg-gradient-to-b from-slate-400 to-transparent"></div>
+        </div>
+    </header>
+
+    <!-- Vision Section -->
+    <section id="about" class="py-32 relative bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div class="reveal">
+                    <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-8 leading-tight">
+                        왜 <span class="text-gradient-primary">블루이코노미</span>인가?
+                    </h2>
+                    <div class="space-y-6 text-lg text-slate-600 font-light leading-relaxed">
+                        <p>
+                            전 세계는 지금 <strong class="text-blue-600 font-medium">AX(AI Transformation)</strong>와 탄소중립 시대로 급변하고 있습니다. 통영은 이 변화의 최전선에 설 수 있는 잠재력을 가졌습니다.
+                        </p>
+                        <p>
+                            단순한 수산업과 관광을 넘어, <strong class="text-blue-600 font-medium">데이터 기술</strong>을 입힌 새로운 해양 산업 생태계. 환경을 지키는 것이 곧 경제 성장이 되는 미래 도시 모델을 제시합니다.
+                        </p>
+                    </div>
+                    
+                    <div class="mt-10 grid grid-cols-2 gap-4">
+                        <div class="bg-slate-50 p-6 rounded-2xl border-l-4 border-cyan-500 shadow-sm">
+                            <div class="text-3xl font-bold text-slate-900 mb-1">AX</div>
+                            <div class="text-xs text-slate-500 uppercase tracking-wider">AI Transformation</div>
+                            <div class="mt-2 text-sm text-slate-600">데이터 기반 산업 전환</div>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-2xl border-l-4 border-blue-600 shadow-sm">
+                            <div class="text-3xl font-bold text-slate-900 mb-1">ESG</div>
+                            <div class="text-xs text-slate-500 uppercase tracking-wider">Sustainability</div>
+                            <div class="mt-2 text-sm text-slate-600">지속가능한 성장 모델</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative reveal delay-200">
+                    <!-- Image Card -->
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl shadow-blue-900/10 group">
+                        <img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=2574&auto=format&fit=crop" alt="Blue Economy Future" class="w-full h-[600px] object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8 z-20 w-full">
+                            <div class="glass p-6 rounded-2xl backdrop-blur-md border border-white/20">
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="text-cyan-300 text-sm font-bold tracking-wider">EXPECTATION</span>
+                                    <i data-lucide="trending-up" class="text-cyan-300 w-5 h-5"></i>
+                                </div>
+                                <div class="flex justify-between items-end">
+                                    <div>
+                                        <div class="text-slate-300 text-xs mb-1">지역 경제 구조 혁신</div>
+                                        <div class="text-2xl font-bold text-white">Future City Model</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4 Pillars (Unified Grid) -->
+    <section id="pillars" class="py-32 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16 md:flex md:justify-between md:items-end reveal">
+                <div class="max-w-2xl">
+                    <span class="text-blue-600 font-bold tracking-wider uppercase text-sm">Core Elements</span>
+                    <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mt-4">4대 핵심 전략 요소</h2>
+                </div>
+                <p class="mt-4 md:mt-0 text-slate-500 text-right max-w-sm text-sm">
+                    데이터, 인프라, 사람, 에너지가<br>유기적으로 연결되는 생태계
+                </p>
+            </div>
+
+            <!-- Unified 1x4 Grid Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 reveal delay-200">
+                <!-- Data -->
+                <div class="group bg-white rounded-3xl p-8 relative overflow-hidden transition-all hover:shadow-xl border border-slate-100 shadow-sm h-full flex flex-col justify-between">
+                    <div>
+                        <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <i data-lucide="database" class="w-24 h-24 text-blue-600"></i>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-4 relative z-10">
+                            <i data-lucide="database" class="w-6 h-6 text-blue-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-2 relative z-10">데이터 (Data)</h3>
+                        <p class="text-slate-600 text-sm relative z-10">기후, 해양환경, 수산 데이터를 자산화하여 AI 분석 기반을 마련합니다.</p>
+                    </div>
+                </div>
+
+                <!-- Energy -->
+                <div class="group bg-slate-900 rounded-3xl p-8 relative overflow-hidden hover:shadow-xl transition-all h-full flex flex-col justify-between">
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40 group-hover:scale-105 transition-transform duration-700"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4 backdrop-blur-sm">
+                            <i data-lucide="zap" class="w-6 h-6 text-yellow-300"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2">에너지 (Energy)</h3>
+                        <p class="text-slate-200 text-sm">섬과 바다를 활용한 신재생 에너지 분산망 및 에너지 자립 실현</p>
+                    </div>
+                </div>
+
+                <!-- Infra -->
+                <div class="group bg-white rounded-3xl p-8 hover:shadow-xl transition-all border border-slate-100 shadow-sm h-full flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center mb-4">
+                            <i data-lucide="network" class="w-5 h-5 text-teal-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">인프라 (Infra)</h3>
+                        <p class="text-slate-600 text-sm">블루카본 실증센터 및 스마트 양식 등 첨단 테스트베드 구축</p>
+                    </div>
+                </div>
+
+                <!-- Man -->
+                <div class="group bg-white rounded-3xl p-8 hover:shadow-xl transition-all border border-slate-100 shadow-sm h-full flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center mb-4">
+                            <i data-lucide="users" class="w-5 h-5 text-indigo-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">사람 (Man)</h3>
+                        <p class="text-slate-600 text-sm">데이터 분석가, 해양 바이오 연구원 등 청년이 정착하는 일자리 창출</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chairman Section -->
+    <section id="chairman" class="py-24 bg-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <!-- Image -->
+                <div class="w-full lg:w-1/3 reveal">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-blue-600 rounded-[2rem] rotate-3 opacity-10"></div>
+                        <!-- Placeholder for Kim Tae-jong's photo -->
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop" alt="Forum Chairman" class="relative rounded-[2rem] shadow-2xl w-full object-cover aspect-[3/4] grayscale hover:grayscale-0 transition-all duration-500">
+                        <div class="absolute -bottom-6 -right-6 bg-white p-6 rounded-2xl shadow-xl border border-slate-100 hidden md:block">
+                            <i data-lucide="quote" class="w-8 h-8 text-blue-500 mb-2"></i>
+                            <p class="text-slate-900 font-bold text-lg">혁신과 공존</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Text -->
+                <div class="w-full lg:w-2/3 reveal delay-100">
+                    <span class="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">Chairman's Message</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
+                        "통영의 바다가 <br>
+                        <span class="text-blue-600">대한민국의 미래</span>가 됩니다."
+                    </h2>
+                    <div class="space-y-6 text-slate-600 text-lg leading-relaxed">
+                        <p>
+                            안녕하십니까, <strong>통영시민포럼</strong> 회장 <strong>김태종 변호사</strong>입니다.
+                        </p>
+                        <p>
+                            우리는 지금 기후위기와 지방소멸이라는 거대한 파도 앞에 서 있습니다. 하지만 이 위기는 역설적으로 통영에게 가장 큰 기회입니다. 천혜의 바다 자원에 첨단 데이터 기술을 입힌 '블루이코노미'는 단순한 산업 전략을 넘어, 우리 도시가 나아가야 할 생존의 길입니다.
+                        </p>
+                        <p>
+                            청년들이 돌아오고, 환경이 되살아나며, 지속 가능한 성장이 이루어지는 도시. <br>
+                            통영시민포럼이 그 해답이 될 것입니다. 포럼은 시민 여러분과 함께 그 길을 만들어가겠습니다.
+                        </p>
+                    </div>
+                    <div class="mt-10 flex items-center gap-4">
+                        <!-- Placeholder Signature -->
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Signature_sample.svg/1200px-Signature_sample.svg.png" alt="Signature" class="h-12 opacity-50">
+                        <div>
+                            <div class="text-slate-900 font-bold">김 태 종</div>
+                            <div class="text-slate-500 text-sm">통영시민포럼 회장 / 변호사</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Forum Info Section -->
+    <section id="forum-info" class="py-24 bg-slate-50 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header -->
+            <div class="text-center mb-16 reveal">
+                <span class="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-600 text-xs font-bold tracking-widest uppercase mb-4">Upcoming Event</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-slate-900 mb-4">통영시민포럼</h2>
+                <div class="inline-block relative">
+                    <p class="text-xl md:text-2xl text-slate-600 font-light italic font-serif">"Tongyeong Reboots with the Blue Economy"</p>
+                    <div class="absolute -bottom-2 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
+                </div>
+                <div class="mt-8 flex flex-wrap justify-center gap-4">
+                     <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-sm border border-slate-100">
+                        <i data-lucide="calendar" class="text-blue-500 w-5 h-5"></i>
+                        <span class="font-bold text-slate-700">1월 24일 (금) 오후 2시</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-sm border border-slate-100">
+                        <i data-lucide="map-pin" class="text-blue-500 w-5 h-5"></i>
+                        <span class="font-bold text-slate-700">통제영거리 시청각실 (100석)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-12">
+                <!-- Left: Info & Keywords -->
+                <div class="w-full lg:w-5/12 reveal delay-100">
+                    <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 h-full">
+                        <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                            <i data-lucide="target" class="text-blue-600"></i> 포럼 주제 및 핵심 키워드
+                        </h3>
+                        <p class="text-slate-600 mb-8 leading-relaxed">
+                            AI 대전환 시대, 통영 지역 전략산업의 AI 생태계 조성 및 블루이코노미 전환을 통한 지역경제 재도약과 청년 인재 유입 전략을 제안합니다.
+                        </p>
+
+                        <div class="space-y-4">
+                            <!-- Keyword Card 1 -->
+                            <div class="p-5 bg-slate-50 rounded-2xl border-l-4 border-cyan-500">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-bold text-slate-900 text-lg">AX (AI Transformation)</span>
+                                    <i data-lucide="cpu" class="w-5 h-5 text-cyan-500"></i>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    단순한 기술 도입을 넘어, 행정·산업·정책 등 도시의 모든 시스템에 <strong>인공지능(AI)을 결합</strong>하여 지역 문제를 해결하는 미래도시 전략적 요소
+                                </p>
+                            </div>
+
+                            <!-- Keyword Card 2 -->
+                            <div class="p-5 bg-slate-50 rounded-2xl border-l-4 border-blue-600">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-bold text-slate-900 text-lg">통영시민포럼</span>
+                                    <i data-lucide="users" class="w-5 h-5 text-blue-600"></i>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    바다 생태계를 보존하며 해양 자원으로 <strong>새로운 경제 가치와 첨단 일자리</strong>를 창출하는 지속 가능한 해양 경제 플랫폼
+                                </p>
+                            </div>
+                        </div>
+                        
+                         <div class="mt-8 pt-6 border-t border-slate-100">
+                            <div class="text-sm text-slate-500 mb-1">주최/주관</div>
+                            <div class="font-bold text-slate-800">통영시민포럼 운영총괄위원회</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Schedule Timeline -->
+                <div class="w-full lg:w-7/12 reveal delay-200">
+                    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                            <h3 class="font-bold text-slate-800">상세 일정 (Schedule)</h3>
+                            <span class="text-xs text-slate-500">* 일정은 현장 상황에 따라 변경될 수 있습니다.</span>
+                        </div>
+                        
+                        <div class="p-6 timeline-line relative">
+                            <!-- Timeline Items -->
+                            <div class="space-y-6">
+                                <!-- Item -->
+                                <div class="relative pl-8 flex gap-4">
+                                    <div class="absolute left-[21px] top-1 w-3.5 h-3.5 bg-white border-2 border-slate-300 rounded-full z-10"></div>
+                                    <div class="w-16 font-mono text-sm text-slate-500 pt-0.5">14:00</div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900">등록 및 리셉션</h4>
+                                        <p class="text-sm text-slate-500">참석자 등록, 안내, 자료집 배부</p>
+                                    </div>
+                                </div>
+                                <!-- Item -->
+                                <div class="relative pl-8 flex gap-4">
+                                    <div class="absolute left-[21px] top-1 w-3.5 h-3.5 bg-white border-2 border-slate-300 rounded-full z-10"></div>
+                                    <div class="w-16 font-mono text-sm text-slate-500 pt-0.5">14:10</div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900">개회식</h4>
+                                        <p class="text-sm text-slate-500">개회선언, 국민의례, 내빈소개</p>
+                                    </div>
+                                </div>
+                                <!-- Item Highlight -->
+                                <div class="relative pl-8 flex gap-4">
+                                    <div class="absolute left-[21px] top-1 w-3.5 h-3.5 bg-blue-500 border-2 border-blue-200 rounded-full z-10 shadow-lg shadow-blue-200"></div>
+                                    <div class="w-16 font-mono text-sm text-blue-600 font-bold pt-0.5">14:20</div>
+                                    <div class="bg-blue-50 p-3 rounded-lg w-full">
+                                        <h4 class="font-bold text-slate-900">환영사 및 축사</h4>
+                                        <p class="text-sm text-slate-600">포럼 회장(김태종 변호사) 환영사</p>
+                                    </div>
+                                </div>
+                                <!-- Item Highlight -->
+                                <div class="relative pl-8 flex gap-4">
+                                    <div class="absolute left-[21px] top-1 w-3.5 h-3.5 bg-cyan-500 border-2 border-cyan-200 rounded-full z-10 shadow-lg shadow-cyan-200"></div>
+                                    <div class="w-16 font-mono text-sm text-cyan-600 font-bold pt-0.5">14:30</div>
+                                    <div class="bg-cyan-50 p-3 rounded-lg w-full">
+                                        <h4 class="font-bold text-slate-900">비전 선포식</h4>
+                                        <p class="text-sm text-slate-600">비전 영상 상영, 3대 정책 발표, 선언문 낭독</p>
+                                    </div>
+                                </div>
+                                <!-- Item -->
+                                <div class="relative pl-8 flex gap-4">
+                                    <div class="absolute left-[21px] top-1 w-3.5 h-3.5 bg-white border-2 border-slate-300 rounded-full z-10"></div>
+                                    <div class="w-16 font-mono text-sm text-slate-500 pt-0.5">14:40</div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900">제1차 주제강연 (40분)</h4>
+                                        <p class="text-sm text-slate-500">주제: “블루이코노미와 통영의 미래(안)”</p>
+                                    </div>
+                                </div>
+                                <!-- Item -->
+                                <div class="relative pl-8 flex gap-4">
+                                    <div class="absolute left-[21px] top-1 w-3.5 h-3.5 bg-white border-2 border-slate-300 rounded-full z-10"></div>
+                                    <div class="w-16 font-mono text-sm text-slate-500 pt-0.5">15:20</div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900">질의응답 & 오픈포럼</h4>
+                                        <p class="text-sm text-slate-500">전문가 패널 토론 및 현장 질의</p>
+                                    </div>
+                                </div>
+                                 <!-- Item -->
+                                <div class="relative pl-8 flex gap-4">
+                                    <div class="absolute left-[21px] top-1 w-3.5 h-3.5 bg-white border-2 border-slate-300 rounded-full z-10"></div>
+                                    <div class="w-16 font-mono text-sm text-slate-500 pt-0.5">15:45</div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900">결의문 채택 및 폐회</h4>
+                                        <p class="text-sm text-slate-500">공동결의문 발표, 기념촬영 및 네트워킹</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 text-center">
+                        <button class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-blue-600 transition-colors shadow-lg flex items-center justify-center gap-2">
+                            온라인 사전 참가 신청하기 <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategy Section -->
+    <section id="strategy" class="py-32 relative overflow-hidden bg-white">
+        <!-- Background Glow -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-50 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-20 reveal">
+                <span class="px-3 py-1 rounded-full border border-slate-200 bg-white text-slate-500 text-xs font-bold tracking-wider uppercase shadow-sm">Action Plan</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mt-6 mb-4">3대 중점 추진 전략</h2>
+                <p class="text-slate-500">실질적인 변화를 만드는 3가지 핵심 축</p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Strategy Card 1 -->
+                <div class="reveal group relative bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-lg hover:shadow-xl transition-all">
+                    <div class="p-8 md:p-12 flex flex-col md:flex-row gap-8 items-center h-full relative z-10">
+                        <div class="w-full md:w-1/2">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="text-6xl font-black text-slate-100 group-hover:text-cyan-50 transition-colors">01</span>
+                                <div class="h-px w-12 bg-cyan-500"></div>
+                                <span class="text-cyan-600 font-bold uppercase tracking-widest text-sm">Renewable Energy</span>
+                            </div>
+                            <h3 class="text-3xl font-bold text-slate-900 mb-4">신재생 에너지 기반 구축 (VPP)</h3>
+                            <p class="text-slate-600 leading-relaxed mb-8">
+                                통영의 수많은 섬을 연결하는 분산형 에너지망을 구축합니다. 태양광, 풍력 발전을 통해 에너지를 자급하고, 남는 전력은 가상발전소(VPP) 기술로 효율적으로 관리하여 에너지 복지를 실현합니다.
+                            </p>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="px-3 py-1 rounded-md bg-slate-50 border border-slate-200 text-xs text-slate-600 font-medium">에너지 복지</span>
+                                <span class="px-3 py-1 rounded-md bg-slate-50 border border-slate-200 text-xs text-slate-600 font-medium">탄소 배출권</span>
+                                <span class="px-3 py-1 rounded-md bg-slate-50 border border-slate-200 text-xs text-slate-600 font-medium">수익 창출</span>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 aspect-video rounded-2xl overflow-hidden relative shadow-md">
+                            <img src="https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Energy">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategy Card 2 -->
+                <div class="reveal group relative bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-lg hover:shadow-xl transition-all">
+                    <div class="p-8 md:p-12 flex flex-col md:flex-row-reverse gap-8 items-center h-full relative z-10">
+                        <div class="w-full md:w-1/2">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="text-6xl font-black text-slate-100 group-hover:text-teal-50 transition-colors">02</span>
+                                <div class="h-px w-12 bg-teal-500"></div>
+                                <span class="text-teal-600 font-bold uppercase tracking-widest text-sm">Innovation Platform</span>
+                            </div>
+                            <h3 class="text-3xl font-bold text-slate-900 mb-4">블루카본 & 바이오 혁신단지</h3>
+                            <p class="text-slate-600 leading-relaxed mb-8">
+                                아이슬란드 IOC 모델을 벤치마킹하여 연구소, 스타트업, 어촌계가 상생하는 혁신 클러스터를 조성합니다. 굴 패각과 해조류를 활용한 고부가가치 소재 산업을 육성합니다.
+                            </p>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="px-3 py-1 rounded-md bg-slate-50 border border-slate-200 text-xs text-slate-600 font-medium">스타트업 육성</span>
+                                <span class="px-3 py-1 rounded-md bg-slate-50 border border-slate-200 text-xs text-slate-600 font-medium">국가 공모</span>
+                                <span class="px-3 py-1 rounded-md bg-slate-50 border border-slate-200 text-xs text-slate-600 font-medium">R&D 센터</span>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 aspect-video rounded-2xl overflow-hidden relative shadow-md">
+                            <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?q=80&w=2069&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Innovation">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategy Card 3 -->
+                <div class="reveal group relative bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-lg hover:shadow-xl transition-all">
+                    <div class="p-8 md:p-12 flex flex-col md:flex-row gap-8 items-center h-full relative z-10">
+                        <div class="w-full md:w-1/2">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="text-6xl font-black text-slate-100 group-hover:text-blue-50 transition-colors">03</span>
+                                <div class="h-px w-12 bg-blue-500"></div>
+                                <span class="text-blue-600 font-bold uppercase tracking-widest text-sm">Blue Culture</span>
+                            </div>
+                            <h3 class="text-3xl font-bold text-slate-900 mb-4">블루 컬쳐 (Blue Culture)</h3>
+                            <p class="text-slate-600 leading-relaxed mb-8">
+                                단순 관람형 관광을 넘어, 기후와 에너지를 테마로 한 야간 경관, 미디어 아트 등 '체류형 관광 콘텐츠'를 개발합니다. 통영의 문화 예술 DNA를 첨단 기술과 결합합니다.
+                            </p>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="px-3 py-1 rounded-md bg-slate-50 border border-slate-200 text-xs text-slate-600 font-medium">체류형 관광</span>
+                                <span class="px-3 py-1 rounded-md bg-slate-50 border border-slate-200 text-xs text-slate-600 font-medium">미디어 아트</span>
+                                <span class="px-3 py-1 rounded-md bg-slate-50 border border-slate-200 text-xs text-slate-600 font-medium">청년 예술가</span>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 aspect-video rounded-2xl overflow-hidden relative shadow-md">
+                            <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Culture">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section id="impact" class="py-32 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4">기대 효과</h2>
+                <p class="text-slate-500">통영시민포럼이 가져올 긍정적인 미래</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Item 1 -->
+                <div class="reveal group p-8 rounded-3xl bg-white border border-slate-100 hover:border-cyan-200 hover:shadow-xl transition-all text-center shadow-sm">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-cyan-50 mb-6 group-hover:bg-cyan-500 group-hover:text-white transition-colors text-cyan-600">
+                        <i data-lucide="briefcase" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">청년 일자리 창출</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">데이터 분석, 바이오 연구 등<br>양질의 전문직 일자리를 통해<br>청년이 돌아오는 도시</p>
+                </div>
+                <!-- Item 2 -->
+                <div class="reveal delay-100 group p-8 rounded-3xl bg-white border border-slate-100 hover:border-teal-200 hover:shadow-xl transition-all text-center shadow-sm">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-teal-50 mb-6 group-hover:bg-teal-500 group-hover:text-white transition-colors text-teal-600">
+                        <i data-lucide="leaf" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">환경 회복 & 탄소중립</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">탄소 흡수원 확보 및<br>지속 가능한 해양 생태계 복원으로<br>청정 바다 유지</p>
+                </div>
+                <!-- Item 3 -->
+                <div class="reveal delay-200 group p-8 rounded-3xl bg-white border border-slate-100 hover:border-blue-200 hover:shadow-xl transition-all text-center shadow-sm">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-50 mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors text-blue-600">
+                        <i data-lucide="globe" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">글로벌 도시 브랜드</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">기후위기 대응 선도 도시로서<br>국가적 롤모델 제시 및<br>글로벌 인지도 상승</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram Section (New) -->
+    <section id="social" class="py-24 bg-white border-t border-slate-100 relative overflow-hidden">
+         <!-- Decor -->
+         <div class="absolute right-0 bottom-0 w-64 h-64 bg-pink-100 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
+         
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-12 reveal">
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <div class="p-2 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 rounded-lg text-white shadow-lg shadow-pink-200">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-slate-900 font-bold text-lg">@tongyeong_blue_forum</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-3">실시간 현장 소식</h2>
+                <p class="text-slate-500">포럼의 최신 뉴스와 생생한 현장 이야기를 인스타그램에서 확인하세요.</p>
+            </div>
+
+            <!-- Instagram Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 reveal delay-100">
+                <!-- Feed Item 1 -->
+                <a href="#" class="group relative block aspect-square rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all hover:-translate-y-1">
+                    <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=1000&auto=format&fit=crop" alt="Forum Meeting" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white backdrop-blur-[2px]">
+                        <div class="flex items-center gap-1"><i data-lucide="heart" class="w-5 h-5 fill-white"></i> 128</div>
+                        <div class="flex items-center gap-1"><i data-lucide="message-circle" class="w-5 h-5"></i> 14</div>
+                    </div>
+                </a>
+                
+                <!-- Feed Item 2 -->
+                <a href="#" class="group relative block aspect-square rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all hover:-translate-y-1">
+                    <img src="https://images.unsplash.com/photo-1621451537084-482c73073a0f?q=80&w=1000&auto=format&fit=crop" alt="Tongyeong Ocean" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white backdrop-blur-[2px]">
+                        <div class="flex items-center gap-1"><i data-lucide="heart" class="w-5 h-5 fill-white"></i> 256</div>
+                        <div class="flex items-center gap-1"><i data-lucide="message-circle" class="w-5 h-5"></i> 32</div>
+                    </div>
+                </a>
+
+                <!-- Feed Item 3 -->
+                <a href="#" class="group relative block aspect-square rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all hover:-translate-y-1">
+                    <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1000&auto=format&fit=crop" alt="AI Tech" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white backdrop-blur-[2px]">
+                        <div class="flex items-center gap-1"><i data-lucide="heart" class="w-5 h-5 fill-white"></i> 89</div>
+                        <div class="flex items-center gap-1"><i data-lucide="message-circle" class="w-5 h-5"></i> 5</div>
+                    </div>
+                </a>
+
+                <!-- Feed Item 4 -->
+                <a href="#" class="group relative block aspect-square rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all hover:-translate-y-1">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1000&auto=format&fit=crop" alt="Youth" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white backdrop-blur-[2px]">
+                        <div class="flex items-center gap-1"><i data-lucide="heart" class="w-5 h-5 fill-white"></i> 342</div>
+                        <div class="flex items-center gap-1"><i data-lucide="message-circle" class="w-5 h-5"></i> 48</div>
+                    </div>
+                </a>
+            </div>
+             <div class="mt-12 text-center reveal delay-200">
+                <a href="#" class="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100 hover:text-slate-900 transition-all font-medium text-sm">
+                    인스타그램 팔로우하기 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white py-16 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+            <div class="flex justify-center mb-8">
+                <div class="p-3 bg-blue-50 rounded-full">
+                    <i data-lucide="waves" class="text-blue-600 h-8 w-8"></i>
+                </div>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-4">통영시민포럼</h2>
+            <p class="mb-10 text-sm text-slate-500 max-w-lg mx-auto">
+                본 페이지는 통영시민포럼 마스터플랜의 비전을 공유하기 위해 제작되었습니다.<br>
+                지속 가능한 통영의 미래를 위해 여러분의 고견을 기다립니다.
+            </p>
+            <div class="flex justify-center gap-8 text-sm font-medium">
+                <a href="#" class="text-slate-500 hover:text-blue-600 transition-colors">포럼 소개</a>
+                <a href="#" class="text-slate-500 hover:text-blue-600 transition-colors">참여 문의</a>
+                <a href="#" class="text-slate-500 hover:text-blue-600 transition-colors">자료실</a>
+            </div>
+            <div class="mt-16 pt-8 border-t border-slate-100 text-xs text-slate-400">
+                &copy; 2025 Tongyeong Citizen Forum. All rights reserved. <br>
+                Designed by TheQR
+            </div>
+        </div>
+    </footer>
+
+    <!-- Quick Floating Menu -->
+    <div class="fixed bottom-8 right-8 z-50 flex flex-col gap-3 items-end">
+        <!-- Instagram -->
+        <a href="#" class="group flex items-center gap-2">
+            <span class="bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">Instagram</span>
+            <div class="bg-white p-3 rounded-full shadow-lg border border-slate-100 text-slate-400 group-hover:text-pink-600 group-hover:scale-110 transition-all">
+                <i data-lucide="instagram" class="w-5 h-5"></i>
+            </div>
+        </a>
+        <!-- Blog/Web -->
+        <a href="#" class="group flex items-center gap-2">
+            <span class="bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">Official Blog</span>
+            <div class="bg-white p-3 rounded-full shadow-lg border border-slate-100 text-slate-400 group-hover:text-green-600 group-hover:scale-110 transition-all">
+                <i data-lucide="message-circle" class="w-5 h-5"></i>
+            </div>
+        </a>
+        <!-- Top Button -->
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-blue-600 p-3 rounded-full shadow-lg text-white hover:bg-blue-700 hover:scale-110 transition-all mt-2 shadow-blue-200">
+            <i data-lucide="arrow-up" class="w-5 h-5"></i>
+        </button>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('shadow-md', 'bg-white/90');
+                navbar.classList.remove('glass-nav');
+            } else {
+                navbar.classList.remove('shadow-md', 'bg-white/90');
+                navbar.classList.add('glass-nav');
+            }
+        });
+
+        // Intersection Observer for Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
